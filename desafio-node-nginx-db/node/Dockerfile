@@ -9,4 +9,4 @@ RUN wget --no-check-certificate https://github.com/jwilder/dockerize/releases/do
     && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
     && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
-EXPOSE 3000
+#EXPOSE 3000

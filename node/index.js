@@ -12,9 +12,17 @@ const config = {
 const mysql = require('mysql')
 const connection = mysql.createConnection(config)
 
-const createSql = `CREATE TABLE IF NOT EXISTS people (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(50), PRIMARY KEY (id));`;
+/*const sql = `INSERT INTO people(name) values('Bruno'), ('CodeEducation')`*/
 
-const sql = `INSERT INTO people(name) values('Bruno'), ('CodeEducation')`
+
+const createSql = `
+    CREATE TABLE IF NOT EXISTS people (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(50), PRIMARY KEY (id));
+  `;
+  Repository.query(createSql);
+
+  const insertSql = `
+    INSERT INTO people (name) values ('Dina'), ('Wesley'), ('SchoolOfNet'), ('CodeEducation');
+  `;
 connection.query(sql)
 connection.end()
 

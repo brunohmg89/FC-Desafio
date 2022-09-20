@@ -32,7 +32,7 @@ services:
 
   nginx:
     build:
-      context: ./desafio-node-nginx-db/nginx
+      context: ./nginx
       dockerfile: Dockerfile.prod
     container_name: nginx
     tty: true

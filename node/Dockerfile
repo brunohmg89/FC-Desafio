@@ -2,7 +2,10 @@ FROM node:15
 
 WORKDIR /usr/src/app
 
-RUN apt-get update && apt-get install -y wget ca-certificates
+RUN apt-get update && \
+    apt-get install -y wget ca-certificates && \
+    npm set strict-ssl false && \
+    npm install express mysql --save
 
 ENV DOCKERIZE_VERSION v0.6.1
 RUN wget --no-check-certificate https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \

@@ -1,19 +1,16 @@
 const express = require('express')
-const app = express()
-const port = 3000
+const app     = express()
+const port    = 3000
 
 const config = {
-    host: 'db',
-    user: 'root',
+    host:     'db',
+    user:     'root',
     password: 'root',
     database: 'nodedb'
 };
 
-const mysql = require('mysql')
+const mysql      = require('mysql')
 const connection = mysql.createConnection(config)
-
-/*const sql = `INSERT INTO people(name) values('Bruno'), ('CodeEducation')`*/
-
 
 const createSql = `
     CREATE TABLE IF NOT EXISTS people (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(50), PRIMARY KEY (id));
@@ -21,10 +18,10 @@ const createSql = `
     const insertSql = `
     INSERT INTO people (name) values ('Bruno'), ('Murilo');
   `;
-connection.query(sql)
+
+connection.query(createSql)  
+connection.query(insertSql)
 connection.end()
-
-
 
 app.get('/',(req,res) => {
     const title = '<h1>Full Cycle Rocks - Bruno!</h1>';

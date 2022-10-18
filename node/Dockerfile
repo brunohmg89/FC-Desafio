@@ -12,6 +12,6 @@ RUN wget --no-check-certificate https://github.com/jwilder/dockerize/releases/do
 
 COPY ./package*.json /usr/src/app
 
-RUN  npm install && npm set strict-ssl false
+RUN  npm set strict-ssl false && npm install 
 
 COPY . /usr/src/app

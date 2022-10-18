@@ -35,74 +35,52 @@ app.listen(port,() => {
     console.log('Rodando na porta ' + port)
 })*/
 
-const express = require('express')
-const app     = express()
-const port    = 3000
+const express = require('express');
+const axios = require('axios').default;
+const mysql = require('mysql');
 
-app.use(express.json())
-app.use(formidable());
-const people = [];
+const app = express();
+const PORT = 3000;
 
-const dataBaseConfig = {
-  connectionLimit : 10,
+const config = {
   host: 'db',
   user: 'root',
+  database: 'nodedb',
   password: 'root',
-  database: 'nodedb'
-}
+};
 
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
+  const connection = mysql.createConnection(config);
 
-  const conn = createConnection(dataBaseConfig);
+  // Creates Table
+  const createTable  = `CREATE TABLE IF NOT EXISTS people (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255) NOT NULL);`
+  connection.query(createTable);
 
-  conn.connect();
+  // Inserts Data
+  const RANDOM = Math.floor(Math.random() * 10);
+  const response = await axios.get('https://swapi.dev/api/people');
+  const personName = response.data.results[RANDOM].name;
+  const insertQuery = `INSERT INTO people(name) values('${personName}')`;
+  connection.query(insertQuery);
 
-  conn.query('SELECT * FROM people', (err, results) => {
-    if (err) {
-      console.log(err)
-    } else {
-      res.send(`
-        <h1>Full Cycle Rocks!</h1>
-        <h2>- Lista de nomes cadastrada no banco de dados.</h2>
-        <ol>
-          ${!!results.length ? results.map(el => `<li>${el.name}</li>`).join('') : ''}
-        </ol>
-        <h2>- Inserir Nomes na aplicação.</h2>
-        <p>
-          <form action="/" method="post">
-            <label for="name">Nome:</label><br />
-            <input type="text" id="name" name="name"><br />
-            <input type="submit" value="Cadastrar">
-          </form>
-        </p>
-      `)
-      conn.end();
+  // Get all user
+  const getUsersQuery = `SELECT id, name FROM people`;  
+  connection.query(getUsersQuery, (error, results, fields) => {
+    if (error) {
+      throw error
+    };
+    
+    let list = '<ul>';
+    for(let people of results) {      
+      list += `<li>${people.name}</li>`;
     }
-  })
-})
 
+    list += '</ul>';    
+    res.send('<h1>Full Cycle Rocks!</h1>' + list);    
+  });   
+  connection.end();
+});
 
-app.post('/', (req, res) => {
-  console.log(req.fields)
-
-  const { name } = req.fields;
-
-  const conn = createConnection(dataBaseConfig);
-
-  conn.connect();
-
-  conn.query(`INSERT INTO people(name) VALUES("${name}")`, (err, results) => {
-    if (err) {
-      console.log(`Nome ${name} foi cadastrado!`)
-    } else {
-      console.log(results)
-      res.redirect('/')
-      conn.end();
-    }
-  })
-})
-
-
-app.listen(port, () => {
-  console.log(`Rodando na porta  ${port}`)
-})
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});

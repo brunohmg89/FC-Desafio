@@ -43,7 +43,7 @@ const port = 3000
 var conn = mysql.createConnection({
     host: "db",
     user: "root",
-    password: "9632",
+    password: "root",
     database: "nodedb"
 });
 

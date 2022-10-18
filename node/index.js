@@ -35,12 +35,9 @@ app.listen(port,() => {
     console.log('Rodando na porta ' + port)
 })*/
 
-import express from 'express'
-import { createConnection } from 'mysql2'
-import formidable from "express-formidable";
-
-const app = express()
-const port = 3000
+const express = require('express')
+const app     = express()
+const port    = 3000
 
 app.use(express.json())
 app.use(formidable());
